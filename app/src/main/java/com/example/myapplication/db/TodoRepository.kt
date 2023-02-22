@@ -11,11 +11,15 @@ class TodoRepository (private val todoDatabaseDao:TodoDatabaseDao){
     }
 
     suspend fun delete(todo:TodoItem){
-        todoDatabaseDao.insert(todo)
+        todoDatabaseDao.delete(todo)
     }
 
     suspend fun update(todo: TodoItem){
         todoDatabaseDao.update(todo)
+    }
+
+    suspend fun get(id:Long):TodoItem{
+        return todoDatabaseDao.get(id)
     }
 
 }

@@ -7,13 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
-//import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.myapplication.databinding.FragmentAddTodoBinding
-//import com.example.myapplication.R
-//import com.example.myapplication.databinding.FragmentTodoListBinding
-//import com.example.myapplication.databinding.FragmentUpdateTodoBinding
 import com.example.myapplication.db.TodoDatabase
 import com.example.myapplication.db.TodoItem
 import java.text.SimpleDateFormat
@@ -25,8 +21,6 @@ class AddTodoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-//        val binding:FragmentUpdateTodoBinding=DataBindingUtil.inflate(inflater,R.layout.fragment_update_todo,container,false)
         val binding = FragmentAddTodoBinding.inflate(inflater,container, false)
         val application= requireNotNull(this.activity).application
         // Create an instance of the ViewModel Factory.
@@ -44,10 +38,8 @@ class AddTodoFragment : Fragment() {
 //        binding.updateTodoViewModel=updateTodoViewModel
 
         binding.button.setOnClickListener {
-//            Toast.makeText(activity,"Add button clicked",Toast.LENGTH_SHORT).show()
             var title:String=binding.editTextTextPersonName.text.toString()
             var desc:String=binding.editTextTextMultiLine.text.toString()
-//            Toast.makeText(activity,"Title: "+title+" Desc: "+desc,Toast.LENGTH_LONG).show()
             if(title==""){
                 Toast.makeText(activity,"Please add title",Toast.LENGTH_SHORT).show()
             }

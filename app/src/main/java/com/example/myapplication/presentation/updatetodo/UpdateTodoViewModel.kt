@@ -1,22 +1,20 @@
-package com.example.myapplication.presentation.addtodo
+package com.example.myapplication.presentation.updatetodo
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.example.myapplication.db.TodoDatabase
 import com.example.myapplication.db.TodoDatabaseDao
 import com.example.myapplication.db.TodoItem
 import com.example.myapplication.db.TodoRepository
 import kotlinx.coroutines.*
 
-class AddTodoViewModel(val database: TodoDatabaseDao, application: Application):AndroidViewModel(application) {
-
+class UpdateTodoViewModel (val database: TodoDatabaseDao, application: Application): AndroidViewModel(application){
 
     private var viewModelJob = Job()
 
-    private val uiscope=CoroutineScope(Dispatchers.Main+viewModelJob)
+    private val uiscope= CoroutineScope(Dispatchers.Main+viewModelJob)
 
     var currTodo= MutableLiveData<TodoItem?>()
 
@@ -25,20 +23,34 @@ class AddTodoViewModel(val database: TodoDatabaseDao, application: Application):
     private val _navigator= MutableLiveData<Boolean>()
     val navigator: LiveData<Boolean>
         get()=_navigator
-
+    var getNight:TodoItem?=null     //this is used in context switching as we cant assign night value in IO thread
     init{
         val dao= TodoDatabase.getInstance(application).todoDatabaseDao
-        repository=TodoRepository(dao)
+        repository= TodoRepository(dao)
         allTodos=repository.allTodos
         _navigator.value=false
     }
 
-    fun addTodo(todo:TodoItem){
+
+    val _nightId=MutableLiveData<TodoItem>()
+    val nightId:LiveData<TodoItem>
+        get()=_nightId
+    fun getArgs(id:Long){
         uiscope.launch {
             withContext(Dispatchers.IO){
-                repository.insert(todo)
+                getNight=repository.get(id)
             }
-            _navigator.value=true
+            _nightId.value=getNight
+        }
+    }
+
+
+    fun updateTodo(todo: TodoItem){
+        uiscope.launch {
+            withContext(Dispatchers.IO){
+                repository.update(todo)
+            }
+            _navigator.value=true           //ready for navigation, we will aware the fragment about and so he will take appropriate action.
         }
     }
 
@@ -50,5 +62,4 @@ class AddTodoViewModel(val database: TodoDatabaseDao, application: Application):
         super.onCleared()
         viewModelJob.cancel()
     }
-
 }

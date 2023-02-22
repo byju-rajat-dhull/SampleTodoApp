@@ -13,6 +13,7 @@ import com.example.myapplication.db.TodoItem
 class TodoAdapter(
     context: TodoListFragment,
     private val itemClick: (item: TodoItem) -> Unit,
+    private val delClick: (delItem: TodoItem) ->Unit
 ): RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
     var allItems = listOf<TodoItem>()
@@ -38,7 +39,7 @@ class TodoAdapter(
 
         holder.delIcon.setOnClickListener {
 //            delBtnClick.onBtnClick(allItems[position])
-
+                delClick.invoke(allItems[position])
         }
 
         holder.itemView.setOnClickListener {
