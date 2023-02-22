@@ -38,21 +38,16 @@ class UpdateTodoFragment : Fragment() {
 
 
         val args= arguments?.let { UpdateTodoFragmentArgs.fromBundle(it) }
-//        binding.titleET.setText()
         if (args != null) {
             updateTodoViewModel.getArgs(args.id)
         }
 
-                //        val args=UpdateTodoFragmentArgs.fromBundle(requireArguments())
-//        updateTodoViewModel.getArgs(args)
-//
         updateTodoViewModel.nightId.observe(viewLifecycleOwner, Observer {
             if(it!=null){
                 binding.titleET.setText(it.title)
                 binding.descET.setText(it.description)
             }
         })
-
 
         binding.button.setOnClickListener {
             val title:String=binding.titleET.text.toString()
@@ -64,15 +59,17 @@ class UpdateTodoFragment : Fragment() {
                 Toast.makeText(activity,"Please add Description, it can't be empty", Toast.LENGTH_SHORT).show()
             }
             else {
-                val todoItem = TodoItem()
-                todoItem.title = title
-                todoItem.description = desc
+                var currID:Long=-1
+                if(args!=null){
+                    currID=args.id
+                }
+                val currtitle:String = title
+                val description:String = desc
                 val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
                 val currentDateAndTime: String = sdf.format(Date())
-                todoItem.timestamp = "Last Updated: $currentDateAndTime"
-                updateTodoViewModel.updateTodo(todoItem)
-//                view?.findNavController()
-//                    ?.navigate(UpdateTodoFragmentDirections.actionUpdateTodoFragmentToTodoListFragment())
+
+                val timestamp:String = "Last Updated: $currentDateAndTime"
+                updateTodoViewModel.updateTodo(TodoItem(currID,currtitle,description,timestamp))
             }
         }
 
