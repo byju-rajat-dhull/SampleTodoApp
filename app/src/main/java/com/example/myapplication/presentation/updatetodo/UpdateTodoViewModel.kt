@@ -55,7 +55,7 @@ class UpdateTodoViewModel (val database: TodoDatabaseDao, application: Applicati
         }
     }
     fun hasFinishedNav(){
-        _navigator.value=false
+        _navigator.value=false              //after navigation we will set the navigator to false, so that it will not get reexecuted on configuration changes
     }
 
     override fun onCleared() {
