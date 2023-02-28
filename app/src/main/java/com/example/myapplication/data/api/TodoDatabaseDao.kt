@@ -1,19 +1,20 @@
-package com.example.myapplication.db
+package com.example.myapplication.data.api
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.myapplication.data.db.TodoItem
 
 @Dao
 interface TodoDatabaseDao {
 
     @Insert
-    suspend fun insert(todo:TodoItem)
+    suspend fun insert(todo: TodoItem)
 
     @Update
     suspend fun update(todo: TodoItem)
 
     @Query("SELECT * from MyTodo WHERE todoID = :id")
-    suspend fun get(id:Long):TodoItem
+    suspend fun get(id:Long): TodoItem
 
     @Query("SELECT * from MyTodo ORDER BY todoID DESC")
     fun getAll(): LiveData<List<TodoItem>>
@@ -22,6 +23,6 @@ interface TodoDatabaseDao {
     suspend fun deleteAll(todos:List<TodoItem>) : Int
 
     @Delete
-    suspend fun delete(todo:TodoItem)
+    suspend fun delete(todo: TodoItem)
 
 }

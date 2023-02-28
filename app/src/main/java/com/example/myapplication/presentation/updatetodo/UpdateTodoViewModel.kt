@@ -4,10 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.myapplication.db.TodoDatabase
-import com.example.myapplication.db.TodoDatabaseDao
-import com.example.myapplication.db.TodoItem
-import com.example.myapplication.db.TodoRepository
+import com.example.myapplication.data.db.TodoDatabase
+import com.example.myapplication.data.api.TodoDatabaseDao
+import com.example.myapplication.data.db.TodoItem
+import com.example.myapplication.data.repository.TodoRepositoryImplementation
 import kotlinx.coroutines.*
 
 class UpdateTodoViewModel (val database: TodoDatabaseDao, application: Application): AndroidViewModel(application){
@@ -16,7 +16,7 @@ class UpdateTodoViewModel (val database: TodoDatabaseDao, application: Applicati
 
     private val uiscope= CoroutineScope(Dispatchers.Main+viewModelJob)
 
-    private val repository: TodoRepository      //The repo where all required functions are implemented
+    private val repository: TodoRepositoryImplementation      //The repo where all required functions are implemented
 
     //navigator and _navigator are basically used as flags
     // for letting the fragment know when to navigate and Encapsulation purpose
@@ -24,11 +24,11 @@ class UpdateTodoViewModel (val database: TodoDatabaseDao, application: Applicati
     val navigator: LiveData<Boolean>
         get()=_navigator
 
-    var getNight:TodoItem?=null     //this is used in context switching as we cant assign night value in IO thread
+    var getNight: TodoItem?=null     //this is used in context switching as we cant assign night value in IO thread
 
     init{       //initializer
         val dao= TodoDatabase.getInstance(application).todoDatabaseDao
-        repository= TodoRepository(dao)
+        repository= TodoRepositoryImplementation(dao)
         _navigator.value=false
     }
 
@@ -51,11 +51,7 @@ class UpdateTodoViewModel (val database: TodoDatabaseDao, application: Applicati
             withContext(Dispatchers.IO){
                 repository.update(todo)
             }
-            _navigator.value=true           //ready for navigation, we will aware the fragment about and so he will take appropriate action.
         }
-    }
-    fun hasFinishedNav(){
-        _navigator.value=false              //after navigation we will set the navigator to false, so that it will not get reexecuted on configuration changes
     }
 
     override fun onCleared() {

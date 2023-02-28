@@ -3,8 +3,7 @@ package com.example.myapplication.presentation.updatetodo
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.myapplication.db.TodoDatabaseDao
-import com.example.myapplication.presentation.listtodo.TodoListViewModel
+import com.example.myapplication.data.api.TodoDatabaseDao
 
 class UpdateTodoViewModelFactory (private val dataSource: TodoDatabaseDao, private val application: Application) : ViewModelProvider.Factory{
 

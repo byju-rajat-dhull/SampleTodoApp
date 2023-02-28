@@ -1,5 +1,6 @@
 package com.example.myapplication.presentation.addtodo
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,13 +11,14 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.myapplication.databinding.FragmentAddTodoBinding
-import com.example.myapplication.db.TodoDatabase
-import com.example.myapplication.db.TodoItem
+import com.example.myapplication.data.db.TodoDatabase
+import com.example.myapplication.data.db.TodoItem
 import java.text.SimpleDateFormat
 import java.util.*
 
 class AddTodoFragment : Fragment() {
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,15 +29,11 @@ class AddTodoFragment : Fragment() {
         val dataSource = TodoDatabase.getInstance(application).todoDatabaseDao
         val viewModelFactory = AddTodoViewModelFactory(dataSource, application)
 
-
 // Get a reference to the ViewModel associated with this fragment.
         val addTodoViewModel =
             ViewModelProvider(
                 this, viewModelFactory
             )[AddTodoViewModel::class.java]
-
-//        binding.lifecycleOwner = this
-//        binding.updateTodoViewModel=updateTodoViewModel
 
         binding.button.setOnClickListener {
             var title:String=binding.editTextTextPersonName.text.toString()
@@ -54,18 +52,16 @@ class AddTodoFragment : Fragment() {
                 val currentDateAndTime: String = sdf.format(Date())
                 todoItem.timestamp="Last Updated: "+currentDateAndTime
                 addTodoViewModel.addTodo(todoItem)
-//                view?.findNavController()
-//                    ?.navigate(UpdateTodoFragmentDirections.actionUpdateTodoFragmentToTodoListFragment())
-            }
-        }
-        addTodoViewModel.navigator.observe(viewLifecycleOwner, Observer {
-            if(it==true){
                 view?.findNavController()
                     ?.navigate(AddTodoFragmentDirections.actionAddTodoFragmentToTodoListFragment())
-                addTodoViewModel.hasFinishedNav()
             }
-        })
-
+        }
+//        addTodoViewModel.navigator.observe(viewLifecycleOwner, Observer {
+//            if(it==true){
+//                view?.findNavController()
+//                    ?.navigate(AddTodoFragmentDirections.actionAddTodoFragmentToTodoListFragment())
+//            }
+//        })
         return binding.root
     }
 

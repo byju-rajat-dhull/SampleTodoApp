@@ -2,7 +2,6 @@ package com.example.myapplication.presentation.updatetodo
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.text.Editable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import com.example.myapplication.databinding.FragmentUpdateTodoBinding
-import com.example.myapplication.db.TodoDatabase
-import com.example.myapplication.db.TodoItem
+import com.example.myapplication.data.db.TodoDatabase
+import com.example.myapplication.data.db.TodoItem
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,7 +34,6 @@ class UpdateTodoFragment : Fragment() {
             ViewModelProvider(
                 this, viewModelFactory
             )[UpdateTodoViewModel::class.java]
-
 
         val args= arguments?.let { UpdateTodoFragmentArgs.fromBundle(it) }
         if (args != null) {
@@ -70,15 +68,9 @@ class UpdateTodoFragment : Fragment() {
 
                 val timestamp:String = "Last Updated: $currentDateAndTime"
                 updateTodoViewModel.updateTodo(TodoItem(currID,currtitle,description,timestamp))
+                view?.findNavController()?.navigate(UpdateTodoFragmentDirections.actionUpdateTodoFragmentToTodoListFragment())
             }
         }
-
-        updateTodoViewModel.navigator.observe(viewLifecycleOwner, Observer {
-            if(it==true){
-                view?.findNavController()?.navigate(UpdateTodoFragmentDirections.actionUpdateTodoFragmentToTodoListFragment())
-                updateTodoViewModel.hasFinishedNav()
-            }
-        })
 
         return binding.root
     }
