@@ -26,15 +26,10 @@ class AddTodoFragment : Fragment() {
         val binding = FragmentAddTodoBinding.inflate(inflater,container, false)
         val application= requireNotNull(this.activity).application
         // Create an instance of the ViewModel Factory.
-        val dataSource = TodoDatabase.getInstance(application).todoDatabaseDao
-        val viewModelFactory = AddTodoViewModelFactory(dataSource, application)
+        // Get a reference to the ViewModel associated with this fragment.
+        val addTodoViewModel = ViewModelProvider(this)[AddTodoViewModel::class.java]
 
-// Get a reference to the ViewModel associated with this fragment.
-        val addTodoViewModel =
-            ViewModelProvider(
-                this, viewModelFactory
-            )[AddTodoViewModel::class.java]
-
+        // Add button click listener
         binding.button.setOnClickListener {
             var title:String=binding.editTextTextPersonName.text.toString()
             var desc:String=binding.editTextTextMultiLine.text.toString()
@@ -56,12 +51,6 @@ class AddTodoFragment : Fragment() {
                     ?.navigate(AddTodoFragmentDirections.actionAddTodoFragmentToTodoListFragment())
             }
         }
-//        addTodoViewModel.navigator.observe(viewLifecycleOwner, Observer {
-//            if(it==true){
-//                view?.findNavController()
-//                    ?.navigate(AddTodoFragmentDirections.actionAddTodoFragmentToTodoListFragment())
-//            }
-//        })
         return binding.root
     }
 

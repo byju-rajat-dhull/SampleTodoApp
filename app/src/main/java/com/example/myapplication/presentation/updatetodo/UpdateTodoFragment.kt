@@ -25,15 +25,10 @@ class UpdateTodoFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         val binding = FragmentUpdateTodoBinding.inflate(inflater,container,false)
-        val application= requireNotNull(this.activity).application
-        // Create an instance of the ViewModel Factory.
-        val dataSource = TodoDatabase.getInstance(application).todoDatabaseDao
-        val viewModelFactory = UpdateTodoViewModelFactory(dataSource, application)
+
 
         val updateTodoViewModel =
-            ViewModelProvider(
-                this, viewModelFactory
-            )[UpdateTodoViewModel::class.java]
+            ViewModelProvider(this)[UpdateTodoViewModel::class.java]
 
         val args= arguments?.let { UpdateTodoFragmentArgs.fromBundle(it) }
         if (args != null) {

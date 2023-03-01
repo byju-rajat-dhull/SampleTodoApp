@@ -5,12 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-//import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.myapplication.databinding.FragmentTodoListBinding
-import com.example.myapplication.data.db.TodoDatabase
 
 
 class TodoListFragment : Fragment() {
@@ -30,14 +28,10 @@ class TodoListFragment : Fragment() {
     }
 
     fun setUpUi(){
-        val application= requireNotNull(this.activity).application
-//        // Create an instance of the ViewModel Factory.
-        val dataSource = TodoDatabase.getInstance(application).todoDatabaseDao
-        val viewModelFactory = TodoListViewModelFactory(dataSource, application)
 
         todoListViewModel =
             ViewModelProvider(
-                this, viewModelFactory
+                this
             )[TodoListViewModel::class.java]
 
 
@@ -45,7 +39,6 @@ class TodoListFragment : Fragment() {
         binding.floatingActionButton.setOnClickListener {
             view?.findNavController()?.navigate(TodoListFragmentDirections.actionTodoListFragmentToAddTodoFragment())
         }
-
 
         //Adapter Code
         val adapter= TodoAdapter(this, itemClick = {
